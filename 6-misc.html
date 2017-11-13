@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Bài giảng 6 - Các vấn đề khác</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+		<link rel="stylesheet" href="css/style.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/atom-one-light.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<script>
+			(adsbygoogle = window.adsbygoogle || []).push({
+				google_ad_client: "ca-pub-1460132164768330",
+				enable_page_level_ads: true
+			});
+
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>Lập trình Web 1</h1>
+					<h3>Bài giảng 5 - PHP</h3>
+					<p>
+						<small>Giảng viên: <a href="mailto:dnkha@fit.hcmus.edu.vn">Đỗ Nguyên Kha</a></small><br>
+						<small>Học kỳ 1/2017-2018 @ FIT-HCMUS</small>
+					</p>
+					<p><small><a href="?print-pdf">[Bản in]</a></small></p>
+					<p><small>Tham khảo: <a href="https://www.w3schools.com/PhP/default.asp">PHP 5 Tutorial</a>, <a href="http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers">PDO Tutorial for MySQL Developers</a></small></p>
+				</section>
+				<section>
+					<h3>Nội dung</h3>
+					<ol>
+						<li>Namespace</li>
+						<li>Autoload</li>
+						<li>Quản lý gói Composer</li>
+						<li>Gửi email</li>
+						<li>PHP Framework</li>
+						<li>Laravel</li>
+					</ol>
+				</section>
+				<section>
+					<h3>Namespace</h3>
+					<p>
+						Namepsace là một không gian nhằm tổ chức các biến, hằng, hàm, lớp thành những nhóm khác nhau mục đích giảm độ dài của tên (prefix) lớp, hàm, biến...
+					</p>
+					<pre><code class="php" style="word-wrap: break-word;" data-trim>
+						&#x3C;?php 
+						namespace Foo\Bar\subnamespace;
+						const FOO = 1;
+						function foo() {}
+						class foo
+						{
+							static function staticmethod() {}
+						}
+					</code></pre>
+				</section>
+				<section>
+					<h3>Global namespace</h3>
+					<p>
+						Global namespace là namespace mặc định của PHP, tương thích với những mã nguồn PHP phiên bản cũ (từ 5.3 giới thiệu namespace)
+					</p>
+					<pre><code class="php" style="word-wrap: break-word;" data-trim>
+						&#x3C;?php 
+						namespace Foo;
+
+						function strlen() {}
+						const INI_ALL = 3;
+						class Exception {}
+
+						$a = \strlen('hi'); // calls global function strlen
+						$b = \INI_ALL; // accesses global constant INI_ALL
+						$c = new \Exception('error'); // instantiates global class Exception
+					</code></pre>
+				</section>
+				<section>
+					<h3>Xác định namespace</h3>
+					<p>
+						<ul>
+							<li><strong>Unqualified name:</strong> Không có namespace => tìm kiếm trong namespace hiện tại nếu không có sẽ tìm ở global</li>
+							<pre><code class="php" style="word-wrap: break-word;" data-trim>
+								&#x3C;?php 
+								namespace Foo;
+								strlen($a);
+							</code></pre>
+							<li><strong>Qualified name:</strong> Có namespace tương đối => tìm kiếm trong namespace con tương ứng của namespace hiện tại hoặc global</li>
+							<pre><code class="php" style="word-wrap: break-word;" data-trim>
+								&#x3C;?php 
+								namespace Foo;
+								bar\strlen($a);
+							</code></pre>
+							<li><strong>Full-qualified name:</strong> Tìm kiếm theo chính xác namespace</li>
+							<pre><code class="php" style="word-wrap: break-word;" data-trim>
+								&#x3C;?php 
+								namespace Foo;
+								\foz\bar\strlen($a);
+							</code></pre>
+						</ul>
+					</p>
+				</section>
+				<section>
+					<h3>Xác định namespace (1)</h3>
+					<p>
+						<ul>
+							<li><strong>Unqualified name:</strong> Không có namespace => tìm kiếm trong namespace hiện tại nếu không có sẽ tìm ở global</li>
+							<pre><code class="php" style="word-wrap: break-word;" data-trim>
+								&#x3C;?php 
+								namespace Foo;
+								strlen($a);
+							</code></pre>
+							<li><strong>Qualified name:</strong> Có namespace tương đối => tìm kiếm trong namespace con tương ứng của namespace hiện tại hoặc global</li>
+							<pre><code class="php" style="word-wrap: break-word;" data-trim>
+								&#x3C;?php 
+								namespace Foo;
+								bar\strlen($a);
+							</code></pre>
+						</ul>
+					</p>
+				</section>
+				<section>
+					<h3>Xác định namespace (2)</h3>
+					<p>
+						<ul>
+							<li><strong>Full-qualified name:</strong> Tìm kiếm theo chính xác namespace</li>
+							<pre><code class="php" style="word-wrap: break-word;" data-trim>
+								&#x3C;?php 
+								namespace Foo;
+								\foz\bar\strlen($a);
+							</code></pre>
+						</ul>
+					</p>
+				</section>
+				<section>
+					<h3>Autoload</h3>
+					<p>
+						Tự động tìm kiếm tập tin chứa class khi được gọi đến mà không cần require
+					</p>
+					<pre><code class="php" style="word-wrap: break-word;" data-trim>
+						&#x3C;?php 
+						function my_autoloader($class) {
+							include 'classes/' . $class . '.class.php';
+						}
+
+						spl_autoload_register('my_autoloader');
+					</code></pre>
+				</section>
+				<section>
+					<h3>Composer</h3>
+					<p>
+						Phần mềm quản lý gói cho PHP. Cài đặt tại <a href="https://getcomposer.org">https://getcomposer.org</a>. Các gói sử dụng được lưu vào <strong>composer.json</strong> và <strong>composer.lock</strong>.
+					</p>
+				</section>
+				<section>
+					<h3>Gửi email</h3>
+					<p>
+						Thông thường PHP sử dụng hàm <strong>mail</strong> để gửi email, tuy nhiên trong hầu hết các bộ cài đặt và hosting đều không được cấu hình đúng. Do đó, nên sử dụng <strong>PHP Mailer</strong> kết hợp SMTP của GMail hay một mail server nào khác.
+					</p>
+				</section>
+				<section>
+					<h3>PHP Framework</h3>
+					<p>
+						Hầu hết các ứng dụng PHP đều dựa trên một framework có sẵn hoặc tự xây dựng. Ví dụ: Laravel, Symfony, Slim...
+					</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+
+				slideNumber: 'c/t',
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { 
+						hljs.configure({
+							tabReplace: '  ', // 2 spaces
+						})
+						hljs.initHighlightingOnLoad(); 
+					} }
+				]
+			});
+		</script>
+		<script>
+			(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+			})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+			ga('create', 'UA-53247198-1', 'auto');
+			ga('send', 'pageview');
+
+		</script>
+	</body>
+</html>
