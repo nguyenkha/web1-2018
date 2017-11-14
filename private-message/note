@@ -1,0 +1,15 @@
+Table messages
+- id
+- content
+- userId
+- userId2
+- type: 0 - out message, 1 - in message
+- createdAt
+
+A -> B : Hi
+
+
+(1, 'Hi', A, B, 0, 123)
+(2, 'Hi', B, A, 1, 123)
+(3, 'Hello', B, A, 0, 456)
+(4, 'Hello', A, B, 1, 456)
